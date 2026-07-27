@@ -1,0 +1,218 @@
+/* Bienchen — Overlay.
+   Die Szene ist der Held; die Typografie hält sich an das Register einer
+   naturkundlichen Tafel: kursiver Serif für den binomialen Namen,
+   schmal laufende Schreibmaschine für Messwerte. */
+
+:root {
+  --field:      #0A1008;
+  --field-warm: #14170D;
+  --ink:        #F2EAD9;
+  --ink-dim:    rgba(242, 234, 217, 0.52);
+  --ink-faint:  rgba(242, 234, 217, 0.28);
+  --honey:      #E9A93C;
+
+  --font-display: Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
+  --font-mono: ui-monospace, "Cascadia Mono", Consolas, "SF Mono", "DejaVu Sans Mono", monospace;
+
+  --edge: clamp(14px, 2.6vw, 34px);
+}
+
+* { box-sizing: border-box; }
+
+/* Klassenselektoren mit display: … würden [hidden] sonst überstimmen. */
+[hidden] { display: none !important; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--field);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+#stage {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+}
+
+/* ── Ladeansicht ─────────────────────────────────────────────── */
+
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(120% 90% at 50% 42%, #16200F 0%, var(--field) 62%);
+  transition: opacity 900ms ease 120ms;
+}
+.loader[data-done] { opacity: 0; pointer-events: none; }
+
+.loader__inner { text-align: center; }
+
+.comb {
+  position: relative;
+  width: 84px;
+  height: 90px;
+  margin: 0 auto 30px;
+}
+.comb i {
+  position: absolute;
+  width: 23px;
+  height: 26.6px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: rgba(233, 169, 60, 0.13);
+  transition: background 420ms ease, transform 420ms cubic-bezier(.2,.9,.3,1);
+}
+.comb i[data-filled] {
+  background: var(--honey);
+  transform: scale(1.06);
+}
+
+.loader__name {
+  margin: 0 0 10px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(24px, 4.4vw, 38px);
+  letter-spacing: 0.005em;
+  color: var(--ink);
+}
+.loader__status {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  min-height: 1.2em;
+}
+
+/* ── Bildtitel ───────────────────────────────────────────────── */
+
+.plate {
+  position: fixed;
+  z-index: 10;
+  top: var(--edge);
+  left: var(--edge);
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  text-shadow: 0 1px 14px rgba(6, 12, 4, 0.75);
+  animation: rise 1100ms cubic-bezier(.16,.8,.3,1) both;
+}
+.plate__binomial {
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(19px, 2.5vw, 27px);
+  line-height: 1;
+}
+.plate__rule {
+  width: clamp(20px, 4vw, 52px);
+  height: 1px;
+  background: var(--honey);
+  opacity: 0.8;
+  transform: translateY(-5px);
+}
+.plate__caption {
+  margin: 0;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+/* ── Feldprotokoll ───────────────────────────────────────────── */
+
+.log {
+  position: fixed;
+  z-index: 10;
+  left: var(--edge);
+  bottom: var(--edge);
+  margin: 0;
+  display: grid;
+  gap: 3px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-shadow: 0 1px 12px rgba(6, 12, 4, 0.8);
+  animation: rise 1100ms cubic-bezier(.16,.8,.3,1) 260ms both;
+}
+.log > div { display: grid; grid-template-columns: 8.6em auto; }
+.log dt { color: var(--ink-faint); text-transform: uppercase; }
+.log dd { margin: 0; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ── Bedienung ───────────────────────────────────────────────── */
+
+.keys {
+  position: fixed;
+  z-index: 10;
+  right: var(--edge);
+  bottom: var(--edge);
+  text-align: right;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--ink-dim);
+  text-shadow: 0 1px 12px rgba(6, 12, 4, 0.8);
+  transition: opacity 700ms ease;
+  animation: rise 1100ms cubic-bezier(.16,.8,.3,1) 420ms both;
+}
+.keys[data-idle] { opacity: 0; }
+.keys p { margin: 0 0 4px; }
+.keys kbd {
+  font: inherit;
+  color: var(--ink);
+  border: 1px solid var(--ink-faint);
+  border-radius: 2px;
+  padding: 1px 4px;
+  margin-right: 3px;
+}
+
+/* ── Fehlerfall ──────────────────────────────────────────────── */
+
+.crash {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 12px;
+  padding: var(--edge);
+  text-align: center;
+  background: var(--field);
+}
+.crash__head {
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(20px, 3.4vw, 30px);
+}
+.crash__body {
+  margin: 0;
+  max-width: 46ch;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--ink-dim);
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(9px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (max-width: 640px) {
+  .keys { display: none; }
+  .plate { flex-direction: column; gap: 4px; }
+  .plate__rule { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plate, .log, .keys { animation-duration: 1ms; animation-delay: 0ms; }
+  .comb i { transition-duration: 1ms; }
+}

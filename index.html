@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bienchen — Feldaufnahme, goldene Stunde</title>
+<meta name="description" content="Eine Honigbiene fliegt in Echtzeit durch eine gegenlicht-durchflutete Sommerwiese. WebGL2, Three.js.">
+<link rel="stylesheet" href="./src/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🐝</text></svg>">
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three/build/three.module.js",
+    "three/addons/": "./vendor/three/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+
+<canvas id="stage"></canvas>
+
+<!-- Ladeansicht: sieben Waben, eine je Aufbauschritt -->
+<div id="loader" class="loader">
+  <div class="loader__inner">
+    <div class="comb" id="comb" aria-hidden="true"></div>
+    <p class="loader__name">Apis mellifera</p>
+    <p class="loader__status" id="loader-status" role="status">Wird vorbereitet</p>
+  </div>
+</div>
+
+<!-- Bildtitel -->
+<header class="plate" id="plate" hidden>
+  <p class="plate__binomial">Apis mellifera</p>
+  <span class="plate__rule"></span>
+  <p class="plate__caption">Feldaufnahme · Goldene Stunde</p>
+</header>
+
+<!-- Feldprotokoll: zeigt echten Zustand der Szene -->
+<dl class="log" id="log" hidden>
+  <div><dt>Einstellung</dt><dd id="log-shot">—</dd></div>
+  <div><dt>Sonnenstand</dt><dd id="log-sun">—</dd></div>
+  <div><dt>Wind</dt><dd id="log-wind">—</dd></div>
+  <div><dt>Halme</dt><dd id="log-blades">—</dd></div>
+  <div><dt>Bilder/s</dt><dd id="log-fps">—</dd></div>
+</dl>
+
+<!-- Bedienung -->
+<nav class="keys" id="keys" hidden>
+  <p><kbd>Leer</kbd> Einstellung wechseln</p>
+  <p><kbd>O</kbd> Kamera selbst führen</p>
+  <p><kbd>R</kbd> Neue Flugroute</p>
+  <p><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> Qualität</p>
+  <p><kbd>H</kbd> Einblendungen</p>
+</nav>
+
+<div class="crash" id="crash" hidden>
+  <p class="crash__head">Die Wiese lässt sich nicht zeichnen</p>
+  <p class="crash__body" id="crash-body"></p>
+</div>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
