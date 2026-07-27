@@ -4,6 +4,19 @@ Eine Honigbiene fliegt in Echtzeit durch eine Sommerwiese im Gegenlicht der
 tiefstehenden Sonne. Läuft im Browser, WebGL 2, ohne Build-Schritt und ohne
 Netzverbindung zur Laufzeit.
 
+Live: <https://bienchen.kekz.org>
+
+## Entstehung
+
+Alles hier ist aus genau einem Satz entstanden:
+
+> lass ein bienchen im browser durch eine schöne grüne wiese fliegen.. beste
+> grafiken, letzte standards, 3D
+
+Geschrieben von **Claude Opus 5** in Claude Code — Gestaltung, Shader, Geometrie,
+Flugverhalten, Kameraführung, Deployment. Der Mensch hat den Satz geliefert und
+zwischendurch „start das mal" gesagt.
+
 ## Starten
 
 ```bash
